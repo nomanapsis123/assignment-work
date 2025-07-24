@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  # RabbitMQ Service
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"   # RabbitMQ broker port
+      - "15672:15672" # RabbitMQ Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+
+  # Auth Service
+  auth-service:
+    build:
+      context: ./auth-service
+      dockerfile: Dockerfile
+    container_name: auth-service
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./auth-service/.env
+    environment:
+      RABBITMQ_URL: amqp://admin:admin@rabbitmq:5672
+    volumes:
+      - ./auth-service:/src
+      - /src/node_modules
+    depends_on:
+      - rabbitmq
+
+  # Product Catalog Service
+  product-service:
+    build:
+      context: ./product-catalog
+      dockerfile: Dockerfile
+    container_name: product-service
+    ports:
+      - "7000:7000"
+    env_file:
+      - ./product-catalog/.env
+    environment:
+      RABBITMQ_URL: amqp://admin:admin@rabbitmq:5672
+    volumes:
+      - ./product-catalog:/src
+      - /src/node_modules
+    depends_on:
+      - rabbitmq

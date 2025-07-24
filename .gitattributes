@@ -1,0 +1,5 @@
+* text=auto
+
+.yarnrc.yml text eol=lf
+yarn.lock text eol=lf
+.gitignore text eol=lf
