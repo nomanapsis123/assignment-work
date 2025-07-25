@@ -19,7 +19,7 @@ services:
       dockerfile: Dockerfile
     container_name: auth-service
     ports:
-      - "3000:3000"
+      - "7000:7000"
     env_file:
       - ./auth-service/.env
     environment:
@@ -30,20 +30,20 @@ services:
     depends_on:
       - rabbitmq
 
-  # Product Catalog Service
+  # Product Service
   product-service:
     build:
-      context: ./product-catalog
+      context: ./product-service
       dockerfile: Dockerfile
     container_name: product-service
     ports:
-      - "7000:7000"
+      - "3000:3000"
     env_file:
-      - ./product-catalog/.env
+      - ./product-service/.env
     environment:
       RABBITMQ_URL: amqp://admin:admin@rabbitmq:5672
     volumes:
-      - ./product-catalog:/src
+      - ./product-service:/src
       - /src/node_modules
     depends_on:
       - rabbitmq
