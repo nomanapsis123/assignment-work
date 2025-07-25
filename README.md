@@ -3,7 +3,7 @@
 This repository contains two independent microservices built with NestJS:
 
 - **Auth Service** (handles user authentication and JWT token management)
-- **Product Catalog Service** (manages product CRUD linked with users)
+- **Product Service** (manages product CRUD linked with users)
 
 Both services communicate asynchronously via **RabbitMQ** message broker.
 
@@ -12,8 +12,8 @@ Both services communicate asynchronously via **RabbitMQ** message broker.
 ## Architecture Overview
 
 +----------------+ RabbitMQ +--------------------+
-| Auth Service | <------------------> | Product Catalog |
-| - User signup | | - Product CRUD |
+| Auth Service | <------------------> | Product Service |
+| - User signup | | - Product catalog CRUD |
 | - Login/logout | | - Token validation |
 | - JWT tokens | | |
 +----------------+ +--------------------+
@@ -46,7 +46,7 @@ project-root/
 │ ├── .env
 │ └── src/...
 │
-├── product-catalog/ # Product microservice
+├── product-service/ # Product microservice
 │ ├── Dockerfile
 │ ├── .env
 │ └── src/...
@@ -66,7 +66,7 @@ Each service uses its own `.env` file located inside its folder.
 - Auth Service `.env`:  
   Contains MongoDB URI, JWT secrets, RabbitMQ URL, Swagger credentials, etc.
 
-- Product Catalog `.env`:  
+- Product Service `.env`:  
   Contains MongoDB URI, RabbitMQ URL, Swagger credentials, etc.
 
 ---
@@ -83,9 +83,9 @@ This will build and start:
 
 RabbitMQ (with management UI at http://localhost:15672, user: admin, pass: admin)
 
-Auth Service (http://localhost:3000)
+Auth Service (http://localhost:7000)
 
-Product Catalog Service (http://localhost:7000)
+Product Service (http://localhost:3000)
 
 Stop All Services
 bash
@@ -127,6 +127,6 @@ MongoDB URIs in .env files can be pointed to local MongoDB or containerized Mong
 
 JWT secrets (AT_SECRET, RT_SECRET) must be kept secure in production.
 
-Product Catalog service validates user tokens by sending a request to Auth service via RabbitMQ.
+Product service validates user tokens by sending a request to Auth service via RabbitMQ.
 
-Auth service emits user events (user.created) to RabbitMQ, consumed by Product Catalog.
+Auth service emits user events (user.created) to RabbitMQ, consumed by Product Service.
