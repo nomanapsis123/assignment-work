@@ -1,4 +1,4 @@
-# Microservices System with Auth & Product Catalog Services
+# Microservices System with Auth & Product Services
 
 This repository contains two independent microservices built with NestJS:
 
